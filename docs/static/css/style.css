@@ -1,0 +1,208 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#container {
+    display: flex;
+    height: 100vh;
+}
+
+#panel {
+    width: 300px;
+    background-color: #f8f9fa;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+#map {
+    flex-grow: 1;
+    height: 100%;
+    position: relative;
+    /* Ensure absolute children (legend) are positioned relative to map */
+}
+
+#legend {
+    background: white;
+    padding: 10px;
+    margin: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    font-size: 12px;
+    line-height: 1.5;
+    z-index: 1000;
+    /* Ensure it's above map tiles */
+    display: none;
+    /* Hidden by default */
+    pointer-events: auto;
+    /* Enable interaction if needed */
+}
+
+.legend-gradient {
+    width: 200px;
+    height: 20px;
+    margin-bottom: 5px;
+    border: 1px solid #ddd;
+}
+
+.legend-labels {
+    display: flex;
+    justify-content: space-between;
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Tab Styles */
+.tab-nav {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px;
+    background-color: transparent;
+    color: #333;
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.tab-btn:hover {
+    background-color: #e9ecef;
+}
+
+.tab-btn.active {
+    color: #007bff;
+    border-bottom-color: #007bff;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+#suggestion-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    position: absolute;
+    width: calc(100% - 40px);
+    z-index: 1001;
+    display: none;
+}
+
+#suggestion-list li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+#suggestion-list li:hover {
+    background-color: #f0f0f0;
+}
+
+#suggestion-list li:last-child {
+    border-bottom: none;
+}
+
+/* Range Selection Styles */
+#range-select-btn.active {
+    background-color: lightblue;
+    color: #333;
+}
+
+.crosshair-cursor {
+    cursor: crosshair !important;
+}
+
+/* Right Property Panel */
+#property-panel {
+    width: 300px;
+    background-color: #f8f9fa;
+    border-left: 1px solid #ddd;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.panel-header h3 {
+    margin: 0;
+}
+
+#close-property-panel {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    padding: 0 5px;
+    width: auto;
+    line-height: 1;
+}
+
+#close-property-panel:hover {
+    color: #000;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
