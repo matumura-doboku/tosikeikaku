@@ -1,0 +1,63 @@
+# routing_params.yaml — 経路アルゴリズム設定（分割分配法/OD割付 用）
+meta:
+  version: 1
+  note: "CSVに分割定義。アルゴリズムは spec.md を参照"
+inputs:
+  attractiveness_file: "/mnt/data/m_attractiveness_v3.csv"
+  line_type_params_file: "/mnt/data/line_type_params.csv"
+  intersection_params_file: "/mnt/data/intersection_params.csv"
+  turn_penalties_file: "/mnt/data/turn_penalties.csv"
+  class_transfer_penalties_file: "/mnt/data/class_transfer_penalties.csv"
+  dist_linehaul_weights_file: "/mnt/data/route_choice_linehaul_distance_weights.csv"
+  origin_local_entry_file: "/mnt/data/local_inflow_from_residential.csv"
+  dest_local_access_file: "/mnt/data/local_access_near_destination.csv"
+  od_boundary_output_template: "/mnt/data/od_boundary_hourly_template.csv"
+  od_centroid_output_template: "/mnt/data/od_centroid_hourly_template.csv"
+periods:
+  - key: AM_PEAK
+    window: "07:00-09:59"
+  - key: MIDDAY
+    window: "10:00-16:59"
+  - key: PM_PEAK
+    window: "17:00-19:59"
+  - key: NIGHT
+    window: "20:00-06:59"
+cost_model:
+  # エッジ基礎時間（自由流）= edge_length_km / base_speed_kmh * 60 * base_time_multiplier
+  base_time_minutes: "len_km / base_speed_kmh * 60 * base_time_multiplier"
+  # BPRによる遅延（所要時間倍率） time = base_time * (1 + α * (v/c)^β)
+  bpr_formula: "t = t0 * (1 + alpha * (flow / capacity)^beta)"
+  # 信号遅延 = signal_density_per_km * len_km * stop_delay_sec_per_signal / 60
+  signal_delay_minutes: "signal_density_per_km * len_km * stop_delay_sec_per_signal / 60"
+  # 時間帯倍率
+  period_delay_multiplier_field: "period_delay_multiplier"
+  # 総所要時間（分）= (自由流+信号遅延)*BPR*時間帯倍率 + 交差点/右左折/線種乗換ペナルティ（分）
+  edge_time_minutes: "(t0 + signal_delay) * bpr * period_mult + penalties_minutes"
+  # 右左折・交差点・線種乗換ペナルティは、リンク遷移時に加算（秒→分）。
+route_choice:
+  # 尤度モデル（ルート選択）
+  model: "multinomial_logit"
+  theta: 0.25   # 感度（大=コスト差に敏感）
+  # 線種重み（距離帯×車種）— cost を weight で割る方式（重み>1は優遇）
+  linehaul_distance_weights: "/mnt/data/route_choice_linehaul_distance_weights.csv"
+  # 住宅地・目的地近傍でのローカル流入/許容補正（リンクがMuni/Otherのとき乗ずる）
+  origin_local_entry: "/mnt/data/local_inflow_from_residential.csv"
+  dest_local_access: "/mnt/data/local_access_near_destination.csv"
+  # 車種: car / truck
+  default_vehicle: "car"
+  # Muni/Other にのみ origin/destination ローカル補正を適用
+  local_classes: ["Muni","Other"]
+  # 近接距離の計測方法：ノード間ユークリッド or ネットワーク投影距離
+  proximity_distance: "euclidean_buffer_m"
+assignment:
+  method: "incremental"   # 例：0.3, 0.5, 0.2 割当 → 各段階でBPR反映
+  increments: [0.3, 0.5, 0.2]
+  od_balancing: "doubly_constrained"  # 発生/集中の同時整合
+outputs:
+  boundary_hourly: "/mnt/data/od_boundary_hourly.csv"
+  centroid_hourly: "/mnt/data/od_centroid_hourly.csv"
+validation:
+  checks:
+    - "size_class monotonicity in attractiveness (S<=M<=L<=XL)"
+    - "period top-hours fall inside active windows for major facilities"
+    - "BPR alpha/beta within [0.1..0.3]/[3.5..5.0]"
