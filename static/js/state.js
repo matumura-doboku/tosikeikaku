@@ -36,14 +36,13 @@ let activePopupGridId = null;
 let currentVizMode = 'none';
 
 let statsRanges = {
-    'pop_total': { min: 0, max: 0 },
-    'ratio_65_over': { min: 0, max: 0 },
-    'ratio_15_64': { min: 0, max: 0 },
-    'ratio_15_64': { min: 0, max: 0 },
-    'traffic_flow': { min: 0, max: 1000 },
-    'land_price': { min: 10, max: 20 },
-    'pop_sim': { min: 0, max: 100 },
-    'vacant_floor_area_rate': { min: 0, max: 100 }
+    pop_total: { min: 0, max: 0 },
+    ratio_65_over: { min: 0, max: 0 },
+    ratio_15_64: { min: 0, max: 0 },
+    traffic_flow: { min: 0, max: 1000 },
+    land_price: { min: 10, max: 20 },
+    pop_sim: { min: 0, max: 100 },
+    vacant_floor_area_rate: { min: 0, max: 100 }
 };
 
 let simulationResults = {};
@@ -53,7 +52,7 @@ let cityYear = 0;
 let pinkGridIds = new Set(); // Range highlight
 let analysisOverlays = [];   // Roads / borders overlays
 
-// Property labels (fixed from garbled characters)
+// Property labels
 const PROPERTY_LABELS = {
     KEY_CODE: 'Key Code',
     MESH1_ID: 'Mesh 1 ID',
@@ -62,13 +61,13 @@ const PROPERTY_LABELS = {
     MESH4_ID: 'Mesh 4 ID',
     OBJ_ID: 'Object ID',
     gml_id: 'GML ID',
-    POP_TOTAL: '人口総数',
-    POP_MALE: '人口（男）',
-    POP_FEMALE: '人口（女）',
-    RATIO_0_14: '年少人口比率(0-14)',
-    RATIO_15_64: '生産年齢人口比率(15-64)',
-    RATIO_65_OVER: '老年人口比率(65+)',
-    FLOOR_AREA: '床面積(㎡)',
-    VACANT_FLOOR_AREA: '空き床面積(㎡)',
-    VACANT_FLOOR_AREA_RATE: '空き床面積率(%)'
+    POP_TOTAL: 'Population Total',
+    POP_MALE: 'Population Male',
+    POP_FEMALE: 'Population Female',
+    RATIO_0_14: 'Age 0-14 Ratio (%)',
+    RATIO_15_64: 'Age 15-64 Ratio (%)',
+    RATIO_65_OVER: 'Age 65+ Ratio (%)',
+    FLOOR_AREA: 'Floor Area (㎡)',
+    VACANT_FLOOR_AREA: 'Vacant Floor Area (㎡)',
+    VACANT_FLOOR_AREA_RATE: 'Vacant Floor Area Rate (%)'
 };
